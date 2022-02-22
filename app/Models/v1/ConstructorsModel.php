@@ -5,7 +5,7 @@ namespace App\Models\v1;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ConstructorModel extends Model
+class ConstructorsModel extends Model
 {
-    protected $table = "constructor";
+    protected $table = "constructors";
 }
