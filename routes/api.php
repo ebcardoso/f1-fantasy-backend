@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\v1\ConstructorsController;
+use App\Http\Controllers\v1\SeasonsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['namespace' => '', 'prefix' => 'v1'],
     function() {
         Route::apiResource('constructors', ConstructorsController::class);
+        Route::apiResource('seasons', SeasonsController::class);
     }
 );
