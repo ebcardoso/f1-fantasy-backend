@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\v1\ConstructorsSeeder;
 use Database\Seeders\v1\DriversSeeder;
 use Database\Seeders\v1\SeasonsSeeder;
+use Database\Seeders\v1\RacesSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,6 +16,7 @@ class DatabaseSeeder extends Seeder
             ConstructorsSeeder::class,
             DriversSeeder::class,
             SeasonsSeeder::class,
+            RacesSeeder::class,
         ]);
     }
 }
