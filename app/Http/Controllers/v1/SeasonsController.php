@@ -100,6 +100,20 @@ class SeasonsController extends Controller
         }
     }
 
+    public function get_races($id)
+    {
+        try {
+            $season = SeasonsModel::find($id);
+            if (is_null($season)) {
+                return response()->json(['message' => 'Season Not Found'], 404);
+            } else {
+                return response()->json($season->races, 200);
+            }
+        } catch (Exception $e) {
+            return response()->json([], 500);
+        }
+    }
+
     private function get_rules() {
         return [
             'name' => 'required',
