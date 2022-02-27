@@ -7,6 +7,7 @@ use Database\Seeders\v1\ConstructorsSeeder;
 use Database\Seeders\v1\DriversSeeder;
 use Database\Seeders\v1\SeasonsSeeder;
 use Database\Seeders\v1\RacesSeeder;
+use Database\Seeders\v1\ParticipationsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +18,7 @@ class DatabaseSeeder extends Seeder
             DriversSeeder::class,
             SeasonsSeeder::class,
             RacesSeeder::class,
+            ParticipationsSeeder::class,
         ]);
     }
 }

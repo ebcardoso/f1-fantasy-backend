@@ -13,4 +13,9 @@ class RacesModel extends Model
     {
         return $this->belongsTo(SeasonsModel::class); //, 'foreign_key', 'id');
     }
+
+    public function participations()
+    {
+        return $this->hasMany(ParticipationsModel::class, 'races_id');
+    }
 }
