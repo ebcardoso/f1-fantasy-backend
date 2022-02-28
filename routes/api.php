@@ -10,6 +10,7 @@ use App\Http\Controllers\v1\ParticipationsController;
 use App\Http\Controllers\v1\auth\RegisterController;
 use App\Http\Controllers\v1\auth\LoginController;
 use App\Http\Controllers\v1\game\TicketsController;
+use App\Http\Controllers\v1\game\FantasyController;
 
 //Authentication Routes
 Route::prefix('v1/auth')->group(
@@ -35,6 +36,7 @@ Route::group(['namespace' => '', 'prefix' => 'v1'],
         Route::prefix('game')->group(
             function() {
                 Route::middleware('auth:sanctum')->apiResource('tickets', TicketsController::class);
+                Route::middleware('auth:sanctum')->apiResource('fantasy', FantasyController::class);
             }
         );
     }
