@@ -4,8 +4,10 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\QueryException;
 use App\Models\v1\RacesModel as RacesModel;
+use App\Http\Requests\v1\RacesStoreFormRequest as RacesStoreFormRequest;
+use App\Http\Requests\v1\RacesUpdateFormRequest as RacesUpdateFormRequest;
 
 class RacesController extends Controller
 {
@@ -14,21 +16,13 @@ class RacesController extends Controller
         try {
             $races = RacesModel::All();
             return response()->json($races, 200);
-        } catch (Exception $e) {
-            return response()->json([], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
-    public function store(Request $request)
+    public function store(RacesStoreFormRequest $request)
     {
-        $validator = Validator::make(
-            $request->all(), 
-            $this->get_rules(), 
-            $this->get_messages());
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
         $race = new RacesModel;
         $race->seasons_id = $request->seasons_id;
         $race->name = $request->name;
@@ -43,8 +37,8 @@ class RacesController extends Controller
         try {
             $race->save();
             return response()->json($race, 201);
-        } catch (Exception $e) {
-            return response()->json(['errors' => $e->getMessage()], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
@@ -57,27 +51,18 @@ class RacesController extends Controller
             } else {
                 return response()->json($race, 200);
             }
-        } catch (Exception $e) {
-            return response()->json([], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(RacesUpdateFormRequest $request, $id)
     {
         $race = RacesModel::find($id);
         if (is_null($race)) {
-            return response()->json(['errors' => 'Race Not Found!'], 404);
-        }
-        
-        $validator = Validator::make(
-            $request->all(), 
-            $this->get_rules(), 
-            $this->get_messages());
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            return response()->json($e, 404);
         }
 
-        $race->seasons_id = $request->seasons_id;
         $race->name = $request->name;
         $race->circuit_name = $request->circuit_name;
         $race->country = $request->country;
@@ -88,10 +73,10 @@ class RacesController extends Controller
         $race->order_of_realization = $request->order_of_realization;
         
         try {
-            $races->save();
-            return response()->json($races, 200);
-        } catch (Exception $e) {
-            return response()->json(['errors' => "Could not Update",], 500);
+            $race->save();
+            return response()->json($race, 200);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
@@ -105,40 +90,12 @@ class RacesController extends Controller
                 try {
                     $delete = $race->delete();
                     return response()->json($race, 200);
-                } catch (Exception $e) {
-                    return response()->json(['errors' => "Could not delete!",], 500);
+                } catch (QueryException $e) {
+                    return response()->json($e, 500);
                 }
             }
-        } catch (Exception $e) {
-            return response()->json(['error' => "Could not delete!",], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
-    }
-
-    private function get_rules() {
-        return [
-            'seasons_id' => 'required',
-            'name' => 'required',
-            'circuit_name' => 'required',
-            'country' => 'required',
-            'url_country_flag' => 'required',
-            'city' => 'required',
-            'date' => 'required',
-            'status' => 'required',
-            'order_of_realization' => 'required'
-        ];
-    }
-
-    private function get_messages() {
-        return [
-            'seasons_id.required' => 'Param <seasons_id> is required.',
-            'name.required' => 'Param <name> is required.',
-            'circuit_name.required' => 'Param <circuit_name> is required.',
-            'country.required' => 'Param <country> is required.',
-            'url_country_flag.required' => 'Param <url_country_flag> is required.',
-            'city.required' => 'Param <city> is required.',
-            'date.required' => 'Param <date> is required.',
-            'status.required' => 'Param <status> is required.',
-            'order_of_realization.required' => 'Param <order_of_realization> is required.'
-        ];
     }
 }
