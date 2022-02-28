@@ -4,8 +4,9 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\QueryException;
 use App\Models\v1\SeasonsModel as SeasonsModel;
+use App\Http\Requests\v1\SeasonsFormRequest as SeasonsFormRequest;
 
 class SeasonsController extends Controller
 {
@@ -14,21 +15,13 @@ class SeasonsController extends Controller
         try {
             $seasons = SeasonsModel::All();
             return response()->json($seasons, 200);
-        } catch (Exception $e) {
-            return response()->json([], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
-    public function store(Request $request)
+    public function store(SeasonsFormRequest $request)
     {
-        $validator = Validator::make(
-            $request->all(), 
-            $this->get_rules(), 
-            $this->get_messages());
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
         $season = new SeasonsModel;
         $season->name = $request->name;
         $season->status = $request->status;
@@ -36,8 +29,8 @@ class SeasonsController extends Controller
         try {
             $season->save();
             return response()->json($season, 201);
-        } catch (Exception $e) {
-            return response()->json(['errors' => $e->getMessage()], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
@@ -50,24 +43,16 @@ class SeasonsController extends Controller
             } else {
                 return response()->json($season, 200);
             }
-        } catch (Exception $e) {
-            return response()->json([], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(SeasonsFormRequest $request, $id)
     {
         $season = SeasonsModel::find($id);
         if (is_null($season)) {
             return response()->json(['errors' => 'Season Not Found!'], 404);
-        }
-        
-        $validator = Validator::make(
-            $request->all(), 
-            $this->get_rules(), 
-            $this->get_messages());
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
         }
 
         $season->name = $request->name;
@@ -76,8 +61,8 @@ class SeasonsController extends Controller
         try {
             $season->save();
             return response()->json($season, 200);
-        } catch (Exception $e) {
-            return response()->json(['errors' => "Could not Update",], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
@@ -91,12 +76,12 @@ class SeasonsController extends Controller
                 try {
                     $delete = $season->delete();
                     return response()->json($season, 200);
-                } catch (Exception $e) {
-                    return response()->json(['errors' => "Could not delete!",], 500);
+                } catch (QueryException $e) {
+                    return response()->json($e, 500);
                 }
             }
-        } catch (Exception $e) {
-            return response()->json(['error' => "Could not delete!",], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
@@ -109,22 +94,8 @@ class SeasonsController extends Controller
             } else {
                 return response()->json($season->races, 200);
             }
-        } catch (Exception $e) {
-            return response()->json([], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
-    }
-
-    private function get_rules() {
-        return [
-            'name' => 'required',
-            'status' => 'required'
-        ];
-    }
-
-    private function get_messages() {
-        return [
-            'name.required' => 'Param <name> is required.',
-            'status.required' => 'Param <status> is required.'
-        ];
     }
 }
