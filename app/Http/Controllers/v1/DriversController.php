@@ -15,8 +15,8 @@ class DriversController extends Controller
         try {
             $drivers = DriversModel::All();
             return response()->json($drivers, 200);
-        } catch (Exception $e) {
-            return response()->json([], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
@@ -36,8 +36,8 @@ class DriversController extends Controller
         try {
             $driver->save();
             return response()->json($driver, 201);
-        } catch (Exception $e) {
-            return response()->json(['errors' => $e->getMessage()], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
@@ -50,8 +50,8 @@ class DriversController extends Controller
             } else {
                 return response()->json($driver, 200);
             }
-        } catch (Exception $e) {
-            return response()->json([], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
@@ -75,8 +75,8 @@ class DriversController extends Controller
         try {
             $driver->save();
             return response()->json($driver, 200);
-        } catch (Exception $e) {
-            return response()->json(['errors' => "Could not Update",], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 
@@ -90,12 +90,12 @@ class DriversController extends Controller
                 try {
                     $delete = $driver->delete();
                     return response()->json($driver, 200);
-                } catch (Exception $e) {
+                } catch (QueryException $e) {
                     return response()->json(['errors' => "Could not delete",], 500);
                 }
             }
-        } catch (Exception $e) {
-            return response()->json(['error' => "Could not delete",], 500);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
         }
     }
 }
