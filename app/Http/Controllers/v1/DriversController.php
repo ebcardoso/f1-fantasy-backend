@@ -4,8 +4,9 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\QueryException;
 use App\Models\v1\DriversModel as DriversModel;
+use App\Http\Requests\v1\DriversFormRequest as DriversFormRequest;
 
 class DriversController extends Controller
 {
@@ -19,16 +20,8 @@ class DriversController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(DriversFormRequest $request)
     {
-        $validator = Validator::make(
-            $request->all(), 
-            $this->get_rules(), 
-            $this->get_messages());
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
         $driver = new DriversModel;
         $driver->first_name = $request->first_name;
         $driver->last_name = $request->last_name;
@@ -62,19 +55,11 @@ class DriversController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(DriversFormRequest $request, $id)
     {
         $driver = DriversModel::find($id);
         if (is_null($driver)) {
             return response()->json(['errors' => 'Driver Not Found!'], 404);
-        }
-        
-        $validator = Validator::make(
-            $request->all(), 
-            $this->get_rules(), 
-            $this->get_messages());
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
         }
 
         $driver->first_name = $request->first_name;
@@ -112,29 +97,5 @@ class DriversController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => "Could not delete",], 500);
         }
-    }
-
-    private function get_rules() {
-        return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'birth_date' => 'required',
-            'name_abbreviation' => 'required',
-            'number' => 'required',
-            'country' => 'required',
-            'country_abbreviation' => 'required'
-        ];
-    }
-
-    private function get_messages() {
-        return [
-            'first_name.required' => 'Param <first_name> is required.',
-            'last_name.required' => 'Param <last_name> is required.',
-            'birth_date.required' => 'Param <birth_date> is required.',
-            'name_abbreviation.required' => 'Param <name_abbreviation> is required.',
-            'number.required' => 'Param <number> is required.',
-            'country.required' => 'Param <country> is required.',
-            'country_abbreviation.required' => 'Param <country_abbreviation> is required.'
-        ];
     }
 }
