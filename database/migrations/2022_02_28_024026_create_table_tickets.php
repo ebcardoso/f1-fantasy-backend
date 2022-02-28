@@ -4,23 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableRaces extends Migration
+class CreateTableTickets extends Migration
 {
     public function up()
     {
-        Schema::create('races', function (Blueprint $table) {
+        Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('seasons_id')
+            $table->foreignId('races_id')
                     ->references('id')
-                    ->on('seasons');
-            $table->string('name');
-            $table->string('circuit_name');
-            $table->string('country');
-            $table->string('url_country_flag');
-            $table->string('city');
-            $table->string('date');
-            $table->integer('order_of_realization');
-            $table->integer('status');
+                    ->on('races');
+            $table->foreignId('user_id')
+                    ->references('id')
+                    ->on('users');
             $table->bigInteger('driver_p1_id')->nullable();
             $table->bigInteger('driver_p2_id')->nullable();
             $table->bigInteger('driver_p3_id')->nullable();
@@ -40,6 +35,6 @@ class CreateTableRaces extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('races');
+        Schema::dropIfExists('tickets');
     }
 }
