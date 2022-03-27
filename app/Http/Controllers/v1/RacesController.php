@@ -98,4 +98,32 @@ class RacesController extends Controller
             return response()->json($e, 500);
         }
     }
+
+    public function get_grid($id) {
+        try {
+            $race = RacesModel::find($id);
+            if (is_null($race)) {
+                return response()->json(['message' => 'Race Not Found'], 404);
+            } else {
+                $drivers = RacesModel::select(
+                            'drivers.id as drivers_id',
+                            'drivers.first_name as first_name',
+                            'drivers.last_name as last_name',
+                            'drivers.name_abbreviation',
+                            'constructors.name as constructor',
+                            'drivers.number as number',
+                            'drivers.url_photo as url_photo',
+                           )
+                           ->join('participations', 'participations.races_id', '=', 'races.id')
+                           ->join('drivers', 'drivers.id', '=', 'participations.drivers_id')
+                           ->join('constructors', 'constructors.id', '=', 'participations.constructors_id')
+                           ->where('races.id', $id)
+                           ->orderBy('drivers.last_name')
+                           ->get();
+                return response()->json($drivers, 200);
+            }
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
+        }
+    }
 }

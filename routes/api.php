@@ -26,6 +26,8 @@ Route::group(['namespace' => '', 'prefix' => 'v1'],
     function() {
         Route::middleware('auth:sanctum')->apiResource('constructors', ConstructorsController::class);
         Route::middleware('auth:sanctum')->apiResource('drivers', DriversController::class);
+        
+        Route::middleware('auth:sanctum')->get('races/{id}/get_grid', [RacesController::class, 'get_grid']);
         Route::middleware('auth:sanctum')->apiResource('races', RacesController::class);
 
         Route::middleware('auth:sanctum')->get('seasons/{id}/get_races', [SeasonsController::class, 'get_races']);
