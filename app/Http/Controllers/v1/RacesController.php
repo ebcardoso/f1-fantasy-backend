@@ -5,6 +5,7 @@ namespace App\Http\Controllers\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Carbon;
 use App\Models\v1\RacesModel as RacesModel;
 use App\Http\Requests\v1\RacesStoreFormRequest as RacesStoreFormRequest;
 use App\Http\Requests\v1\RacesUpdateFormRequest as RacesUpdateFormRequest;
@@ -94,6 +95,20 @@ class RacesController extends Controller
                     return response()->json($e, 500);
                 }
             }
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
+        }
+    }
+
+    public function get_next_race() {
+        try{
+            $races = RacesModel::select('*')
+                                ->where('date', '>=', Carbon::today()->toDateString())
+                                ->where('status', 1)
+                                ->orderBy('order_of_realization')
+                                ->limit(1)
+                                ->get();
+            return response()->json($races[0], 200);
         } catch (QueryException $e) {
             return response()->json($e, 500);
         }
