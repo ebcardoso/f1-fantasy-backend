@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use App\Models\v1\RacesModel as RacesModel;
+use App\Models\v1\ParticipationsModel as ParticipationsModel;
+use App\Models\v1\ConstructorsModel as ConstructorsModel;
 use App\Http\Requests\v1\RacesStoreFormRequest as RacesStoreFormRequest;
 use App\Http\Requests\v1\RacesUpdateFormRequest as RacesUpdateFormRequest;
 
@@ -136,6 +138,19 @@ class RacesController extends Controller
                            ->orderBy('drivers.last_name')
                            ->get();
                 return response()->json($drivers, 200);
+            }
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
+        }
+    }
+
+    public function get_constructors($id) {
+        try {
+            $race = RacesModel::find($id);
+            if (is_null($race)) {
+                return response()->json(['message' => 'Race Not Found'], 404);
+            } else {
+                return response()->json($race->load('constructors')->constructors, 200);
             }
         } catch (QueryException $e) {
             return response()->json($e, 500);

@@ -18,4 +18,9 @@ class RacesModel extends Model
     {
         return $this->hasMany(ParticipationsModel::class, 'races_id');
     }
+
+    public function constructors()
+    {
+        return $this->belongsToMany(ConstructorsModel::class, "participations", "races_id", "constructors_id")->distinct()->orderBy('name');
+    }
 }

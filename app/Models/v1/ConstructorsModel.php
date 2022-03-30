@@ -13,4 +13,9 @@ class ConstructorsModel extends Model
     {
         return $this->hasMany(ParticipationsModel::class, 'constructors_id');
     }
+
+    public function races()
+    {
+        return $this->belongsToMany(RacesModel::class, "participations", "constructors_id", "races_id");
+    }
 }

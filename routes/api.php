@@ -30,6 +30,7 @@ Route::group(['namespace' => '', 'prefix' => 'v1'],
         
         Route::middleware('auth:sanctum')->get('races/get_next_race', [RacesController::class, 'get_next_race']);
         Route::middleware('auth:sanctum')->get('races/{id}/get_grid', [RacesController::class, 'get_grid']);
+        Route::middleware('auth:sanctum')->get('races/{id}/get_constructors', [RacesController::class, 'get_constructors']);
         Route::middleware('auth:sanctum')->apiResource('races', RacesController::class);
 
         Route::middleware('auth:sanctum')->get('seasons/{id}/get_races', [SeasonsController::class, 'get_races']);
