@@ -78,6 +78,16 @@ class TicketsController extends Controller
             return response()->json(['errors' => 'Ticket Not Found!'], 404);
         }
         
+        //Verifing if there are repeated drivers_ids in p1-p5 fields
+        $p1_p5 = Array($request->driver_p1_id, $request->driver_p2_id,
+                       $request->driver_p3_id, $request->driver_p4_id, 
+                       $request->driver_p5_id);
+        $p1_p5 = array_unique($p1_p5);
+        if (count($p1_p5) < 5) {
+            return response()->json(['message' => 'Os pilotos de P1 a P5 devem ser diferentes.'], 400);
+        }
+
+        //Updating the Ticket
         $ticket->driver_p1_id = $request->driver_p1_id;
         $ticket->driver_p2_id = $request->driver_p2_id;
         $ticket->driver_p3_id = $request->driver_p3_id;
