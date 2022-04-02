@@ -13,6 +13,25 @@ class TicketsController extends Controller
 {
     public function store(TicketsStoreFormRequest $request)
     {
+        //Verifying if user already registered a ticket for this race
+        $count_ticket = TicketsModel::select('id')
+                            ->where('user_id', auth()->user()->id)
+                            ->where('races_id', $request->races_id)
+                            ->count();
+        if ($count_ticket > 0) {
+            return response()->json(['message' => 'O ticket já foi criado para esta corrida.'], 400);
+        }
+
+        //Verifing if there are repeated drivers_ids in p1-p5 fields
+        $p1_p5 = Array($request->driver_p1_id, $request->driver_p2_id,
+                       $request->driver_p3_id, $request->driver_p4_id, 
+                       $request->driver_p5_id);
+        $p1_p5 = array_unique($p1_p5);
+        if (count($p1_p5) < 5) {
+            return response()->json(['message' => 'Os pilotos de P1 a P5 devem ser diferentes.'], 400);
+        }
+
+        //Registering a Ticket
         $ticket = new TicketsModel;
         $ticket->user_id = auth()->user()->id;
         $ticket->races_id = $request->races_id;
