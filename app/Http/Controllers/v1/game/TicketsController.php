@@ -48,6 +48,7 @@ class TicketsController extends Controller
         $ticket->num_safetycars = $request->num_safetycars;
         $ticket->win_num_of_pits = $request->win_num_of_pits;
         $ticket->win_tyre = $request->win_tyre;
+        $ticket->num_dnf = $request->num_dnf;
 
         try {
             $ticket->save();
@@ -101,6 +102,7 @@ class TicketsController extends Controller
         $ticket->num_safetycars = $request->num_safetycars;
         $ticket->win_num_of_pits = $request->win_num_of_pits;
         $ticket->win_tyre = $request->win_tyre;
+        $ticket->num_dnf = $request->num_dnf;
         
         try {
             $ticket->save();

@@ -23,9 +23,11 @@ class HomeController extends Controller
                 ];
                 return response()->json($response, 200);
             } else {
-                $response = $ticket[0];
-                $response['mode_code'] = 2;
-                $response['mode_type'] = 'update_mode';
+                $response = [
+                    'mode_code' => 2,
+                    'mode_type' => 'update_mode',
+                    'ticket' => $ticket[0]
+                ];
                 return response()->json($response, 200);
             }
         } catch (QueryException $ex) {

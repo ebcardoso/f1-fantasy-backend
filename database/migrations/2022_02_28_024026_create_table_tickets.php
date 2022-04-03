@@ -29,6 +29,7 @@ class CreateTableTickets extends Migration
             $table->integer('num_safetycars')->nullable();
             $table->integer('win_num_of_pits')->nullable();
             $table->integer('win_tyre')->nullable();
+            $table->integer('num_dnf')->nullable();
             $table->timestamps();
         });
     }

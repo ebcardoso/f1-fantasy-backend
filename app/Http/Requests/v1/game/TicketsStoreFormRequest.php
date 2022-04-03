@@ -22,6 +22,7 @@ class TicketsStoreFormRequest extends FormRequest
             'num_safetycars' => 'required',
             'win_num_of_pits' => 'required',
             'win_tyre' => 'required',
+            'num_dnf' => 'required',
         ];
     }
 
@@ -41,6 +42,7 @@ class TicketsStoreFormRequest extends FormRequest
             'num_safetycars.required' => 'Param <num_safetycars> is required.',
             'win_num_of_pits.required' => 'Param <win_num_of_pits> is required.',
             'win_tyre.required' => 'Param <win_tyre> is required.',
+            'num_dnf.required' => 'Param <num_dnf> is required.',
         ];
     }
 }
