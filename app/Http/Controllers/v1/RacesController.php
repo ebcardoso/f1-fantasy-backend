@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\v1\RacesModel as RacesModel;
 use App\Models\v1\ParticipationsModel as ParticipationsModel;
 use App\Models\v1\ConstructorsModel as ConstructorsModel;
@@ -104,7 +105,7 @@ class RacesController extends Controller
 
     public function get_next_race() {
         try{
-            $races = RacesModel::select('*')
+            $races = RacesModel::select('*', DB::raw("(CASE WHEN races.date > ".Carbon::today()->toDateString()." THEN 1 ELSE 0 END) AS can_modify_ticket"))
                                 ->where('date', '>=', Carbon::today()->toDateString())
                                 ->where('status', 1)
                                 ->orderBy('order_of_realization')
