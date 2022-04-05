@@ -105,7 +105,7 @@ class RacesController extends Controller
 
     public function get_next_race() {
         try{
-            $races = RacesModel::select('*', DB::raw("(CASE WHEN races.date > ".Carbon::today()->toDateString()." THEN 1 ELSE 0 END) AS can_modify_ticket"))
+            $races = RacesModel::select('*', DB::raw("(CASE WHEN Date(date) > now() THEN 1 ELSE 0 END) AS can_modify_ticket"))
                                 ->where('date', '>=', Carbon::today()->toDateString())
                                 ->where('status', 1)
                                 ->orderBy('order_of_realization')
