@@ -26,6 +26,8 @@ Route::prefix('v1/auth')->group(
 Route::group(['namespace' => '', 'prefix' => 'v1'],
     function() {
         Route::middleware('auth:sanctum')->apiResource('constructors', ConstructorsController::class);
+        
+        Route::middleware('auth:sanctum')->get('drivers/get_active_drivers', [DriversController::class, 'get_active_drivers']);
         Route::middleware('auth:sanctum')->apiResource('drivers', DriversController::class);
         
         Route::middleware('auth:sanctum')->get('races/get_next_race', [RacesController::class, 'get_next_race']);

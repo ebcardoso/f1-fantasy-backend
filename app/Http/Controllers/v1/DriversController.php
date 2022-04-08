@@ -98,4 +98,17 @@ class DriversController extends Controller
             return response()->json($e, 500);
         }
     }
+
+    public function get_active_drivers()
+    {
+        try {
+            $drivers = DriversModel::select('*')
+                                     ->where('status', 1)
+                                     ->orderBy('last_name')
+                                     ->get();
+            return response()->json($drivers, 200);
+        } catch (QueryException $e) {
+            return response()->json($e, 500);
+        }
+    }
 }

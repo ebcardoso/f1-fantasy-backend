@@ -17,6 +17,7 @@ class CreateTableDrivers extends Migration
             $table->integer('number');
             $table->string('country');
             $table->string('country_abbreviation');
+            $table->integer('status');
             $table->string('url_country_flag')->nullable();
             $table->string('url_photo')->nullable();
             $table->timestamps();
